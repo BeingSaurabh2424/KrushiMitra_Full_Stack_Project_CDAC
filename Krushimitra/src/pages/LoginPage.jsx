@@ -39,7 +39,8 @@ const LoginPage = ({onLogin,setCurrentPage}) => {
             <LogIn size={40} className='mb-2 text-primary'/>
             <h3>Login to KrushiMitra</h3>
         </Card.Header>
-      <Card.Body>  
+      <Card.Body> 
+         <h2>Welcome</h2>
         {error && <Alert variant="danger">{error}</Alert>}   
 
       <Form OnSubmit={handleSubmit}>
