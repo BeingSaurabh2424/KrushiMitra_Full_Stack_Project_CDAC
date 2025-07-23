@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelectedProduct, showAlert }) => {
   return (
@@ -20,13 +20,28 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
         </Container>
       </div>
 
-      {/* Placeholder for Products */}
+      {/* Main Content */}
       <Container className="mt-5" id="products-section">
         <div className="text-center mb-5">
           <h2 className="display-5 fw-bold text-primary">Our Fresh Products</h2>
           <p className="lead text-muted">Discover the finest selection of farm-fresh produce</p>
         </div>
-        {/* Product grid will be added here */}
+
+        {/* Products Grid */}
+        <Row>
+          {products.map(product => (
+            <Col key={product.id} lg={4} md={6} className="mb-4">
+              <Card className="h-100">
+                <Card.Img variant="top" src={product.image} />
+                <Card.Body>
+                  <Card.Title>{product.name}</Card.Title>
+                  <Card.Text>{product.description}</Card.Text>
+                  <div className="h5 fw-bold">₹{product.price}/{product.unit}</div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
     </div>
   );
