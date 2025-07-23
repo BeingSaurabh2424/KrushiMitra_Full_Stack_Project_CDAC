@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { ShoppingCart } from 'lucide-react';
 
 const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelectedProduct, showAlert }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -15,6 +16,18 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  // Handle adding product to cart
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation();
+    addToCart(product, 1);
+  };
+
+  // Navigate to product detail page
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setCurrentPage('product-detail');
+  };
 
   return (
     <div>
@@ -78,12 +91,30 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
         <Row>
           {filteredProducts.map(product => (
             <Col key={product.id} lg={4} md={6} className="mb-4">
-              <Card className="h-100">
+              <Card 
+                className="h-100" 
+                onClick={() => handleProductClick(product)}
+                style={{ cursor: 'pointer' }}
+              >
                 <Card.Img variant="top" src={product.image} />
                 <Card.Body>
                   <Card.Title>{product.name}</Card.Title>
                   <Card.Text>{product.description}</Card.Text>
                   <div className="h5 fw-bold">₹{product.price}/{product.unit}</div>
+                  {product.inStock ? (
+                    <Button 
+                      variant="primary" 
+                      className="w-100"
+                      onClick={(e) => handleAddToCart(product, e)}
+                    >
+                      <ShoppingCart size={18} className="me-2" />
+                      Add to Cart
+                    </Button>
+                  ) : (
+                    <Button variant="secondary" disabled className="w-100">
+                      Out of Stock
+                    </Button>
+                  )}
                 </Card.Body>
               </Card>
             </Col>
