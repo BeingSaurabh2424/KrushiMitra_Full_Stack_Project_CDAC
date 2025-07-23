@@ -1,7 +1,21 @@
-import React from 'react';
-import { Container, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 
 const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelectedProduct, showAlert }) => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Generate unique categories from products
+  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))];
+  
+  // Filter products based on category and search term
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <div>
       {/* Hero Section */}
@@ -20,13 +34,61 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
         </Container>
       </div>
 
-      {/* Placeholder for Products */}
+      {/* Main Content */}
       <Container className="mt-5" id="products-section">
         <div className="text-center mb-5">
           <h2 className="display-5 fw-bold text-primary">Our Fresh Products</h2>
           <p className="lead text-muted">Discover the finest selection of farm-fresh produce</p>
         </div>
-        {/* Product grid will be added here */}
+
+        {/* Search and Filter */}
+        <Row className="mb-4 g-3">
+          <Col md={6} lg={4}>
+            <Form.Control
+              type="text"
+              placeholder="Search products..."
+              size="lg"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Col>
+          <Col md={6} lg={4}>
+            <Form.Select 
+              size="lg"
+              value={selectedCategory} 
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              {categories.map(category => (
+                <option key={category} value={category}>
+                  {category === 'all' ? 'All Categories' : category}
+                </option>
+              ))}
+            </Form.Select>
+          </Col>
+          <Col lg={4} className="d-flex align-items-center">
+            <small className="text-muted">
+              <strong>{filteredProducts.length}</strong> products found
+              {selectedCategory !== 'all' && ` in ${selectedCategory}`}
+              {searchTerm && ` matching "${searchTerm}"`}
+            </small>
+          </Col>
+        </Row>
+
+        {/* Products Grid */}
+        <Row>
+          {filteredProducts.map(product => (
+            <Col key={product.id} lg={4} md={6} className="mb-4">
+              <Card className="h-100">
+                <Card.Img variant="top" src={product.image} />
+                <Card.Body>
+                  <Card.Title>{product.name}</Card.Title>
+                  <Card.Text>{product.description}</Card.Text>
+                  <div className="h5 fw-bold">₹{product.price}/{product.unit}</div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
     </div>
   );
