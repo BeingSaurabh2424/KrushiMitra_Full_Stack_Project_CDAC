@@ -5,7 +5,6 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
 
 function App() {
   const [count, setCount] = useState(0);
