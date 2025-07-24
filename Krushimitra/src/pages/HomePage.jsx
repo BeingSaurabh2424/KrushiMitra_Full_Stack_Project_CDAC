@@ -1,45 +1,20 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
-import { ShoppingCart, Star } from "lucide-react";
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 
-const HomePage = ({
-  products,
-  addToCart,
-  currentUser,
-  setCurrentPage,
-  setSelectedProduct,
-  showAlert,
-}) => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
+const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelectedProduct, showAlert }) => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Generate unique categories from products
-  const categories = [
-    "all",
-    ...Array.from(new Set(products.map((p) => p.category))),
-  ];
-
+  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))];
+  
   // Filter products based on category and search term
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  // Handle adding product to cart
-  const handleAddToCart = (product, e) => {
-    e.stopPropagation();
-    addToCart(product, 1);
-  };
-
-  // Navigate to product detail page
-  const handleProductClick = (product) => {
-    setSelectedProduct(product);
-    setCurrentPage("product-detail");
-  };
 
   return (
     <div>
@@ -83,6 +58,7 @@ const HomePage = ({
               size="lg"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+
               className="shadow-sm"
             />
           </Col>
@@ -96,6 +72,7 @@ const HomePage = ({
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category === "all" ? "All Categories" : category}
+
                 </option>
               ))}
             </Form.Select>
@@ -103,7 +80,9 @@ const HomePage = ({
           <Col lg={4} className="d-flex align-items-center">
             <small className="text-muted">
               <strong>{filteredProducts.length}</strong> products found
-              {selectedCategory !== "all" && ` in ${selectedCategory}`}
+
+              {selectedCategory !== 'all' && ` in ${selectedCategory}`}
+
               {searchTerm && ` matching "${searchTerm}"`}
             </small>
           </Col>
@@ -111,7 +90,9 @@ const HomePage = ({
 
         {/* Products Grid */}
         <Row>
-          {filteredProducts.map((product) => (
+
+          {filteredProducts.map(product => (
+
             <Col key={product.id} lg={4} md={6} className="mb-4">
               <Card
                 className="product-card h-100 fade-in"
