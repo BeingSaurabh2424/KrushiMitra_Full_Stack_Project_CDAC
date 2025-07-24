@@ -43,7 +43,7 @@ const LoginPage = ({onLogin,setCurrentPage}) => {
          <h2>Welcome</h2>
         {error && <Alert variant="danger">{error}</Alert>}   
 
-      <Form OnSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className='mb-3'>
             <Form.Label>Email Address</Form.Label>
             <Form.Control
