@@ -3,6 +3,7 @@
   color: #f0f0f0;
   position: relative;
   overflow: hidden;
+  /* height: 300px; */
 }
 
 .footer-section::before {
