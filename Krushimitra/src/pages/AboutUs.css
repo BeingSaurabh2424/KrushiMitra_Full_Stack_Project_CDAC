@@ -1,0 +1,25 @@
+.about-us-section {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #22c55e;
+  font-weight: 700;
+  position: relative;
+}
+
+.info-card {
+  background-color: #fff;
+  padding: 25px 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+  border: 1px solid #22c55e33;
+}
