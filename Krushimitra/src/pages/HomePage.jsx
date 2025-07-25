@@ -1,25 +1,32 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
-import { ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  Alert,
+} from "react-bootstrap";
+import { ShoppingCart, Star } from "lucide-react";
 
 const HomePage = ({
   products,
   addToCart,
   currentUser,
-  setCurrentPage,
   setSelectedProduct,
   showAlert,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-  // Generate unique categories from products
   const categories = [
     "all",
     ...Array.from(new Set(products.map((p) => p.category))),
   ];
 
-  // Filter products based on category and search term
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
@@ -29,16 +36,14 @@ const HomePage = ({
     return matchesCategory && matchesSearch;
   });
 
-  // Handle adding product to cart
   const handleAddToCart = (product, e) => {
     e.stopPropagation();
     addToCart(product, 1);
   };
 
-  // Navigate to product detail page
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    setCurrentPage("product-detail");
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -46,19 +51,22 @@ const HomePage = ({
       {/* Hero Section */}
       <div className="hero-section">
         <Container>
-          <h1 className="display-4 fw-bold">Fresh from Farm to Your Table</h1>
-          <p className="lead">
+          <h1 className="fade-in display-4 fw-bold">
+            Fresh from Farm to Your Table
+          </h1>
+          <p className="fade-in lead">
             Direct from farmers - Fresh, Organic, and Affordable
           </p>
           <Button
             variant="warning"
             size="lg"
             className="fade-in px-4 py-2"
-            onClick={() =>
-              document
-                .getElementById("products-section")
-                .scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => {
+              const element = document.getElementById("products-section");
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
           >
             Start Shopping
           </Button>
@@ -123,6 +131,7 @@ const HomePage = ({
                     variant="top"
                     src={product.image}
                     className="product-image"
+                    style={{ transition: "transform 0.3s ease" }}
                   />
                   <div className="product-overlay">
                     <small className="text-white">Click to view details</small>
@@ -143,12 +152,13 @@ const HomePage = ({
                     <div className="d-flex align-items-center mb-2">
                       <div className="text-warning me-2">
                         {[...Array(5)].map((_, i) => (
-                          <span key={i}>★</span>
+                          <Star key={i} size={14} fill="currentColor" />
                         ))}
                       </div>
                       <small className="text-muted">(4.5) 120 reviews</small>
                     </div>
                   </div>
+
                   <div className="mt-auto">
                     {product.inStock ? (
                       <Button
@@ -170,6 +180,7 @@ const HomePage = ({
             </Col>
           ))}
         </Row>
+
         {filteredProducts.length === 0 && (
           <div className="text-center py-5">
             <div className="mb-4">
