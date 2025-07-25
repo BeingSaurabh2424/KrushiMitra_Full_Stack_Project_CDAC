@@ -53,6 +53,16 @@ const LoginPage = ({ onLogin }) => {
                 />
               </Form.Group>
 
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+              </Form.Group>
 
               <Button 
                 variant="primary" 
