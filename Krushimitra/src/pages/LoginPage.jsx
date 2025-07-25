@@ -1,100 +1,104 @@
-import React, { useState } from 'react'
-import {Button, Card, Container, Form,Alert} from 'react-bootstrap'
-import {LogIn} from 'lucide-react'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+import { LogIn } from 'lucide-react';
 
-const LoginPage = ({onLogin,setCurrentPage}) => {
-  
-  const [email, setEmail] = useState('')
-  const [password, setPassword] =useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+const LoginPage = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) =>{
-    e.preventDeafault()
-    setError('')
-    setIsLoading(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
 
-    if(!email || !password){
-      setError("Please fill in all fields")
-      setIsLoading(false)
-      return
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
     }
 
-    setTimeout(()=>{
-      const success = onLogin(email,password)
-      if(!success) {
-        setError('Invalid email or password')
+    // Simulate API call delay
+    setTimeout(() => {
+      const success = onLogin(email, password);
+      if (!success) {
+        setError('Invalid email or password');
       }
-      setIsLoading(false)
-    },1000)
-
-  }
-
+      setIsLoading(false);
+    }, 1000);
+  };
 
   return (
-    <Container className='mt-5'>
-    <div className='form-container fade-in'>
-      <Card>
-        <Card.Header className='text-center'>
-            <LogIn size={40} className='mb-2 text-primary'/>
+    <Container className="mt-5">
+      <div className="form-container fade-in">
+        <Card>
+          <Card.Header className="text-center">
+            <LogIn size={40} className="mb-2 text-primary" />
             <h3>Login to KrushiMitra</h3>
-        </Card.Header>
-      <Card.Body> 
-         <h2>Welcome</h2>
-        {error && <Alert variant="danger">{error}</Alert>}   
+          </Card.Header>
+          <Card.Body>
+            {error && <Alert variant="danger">{error}</Alert>}
+            
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                />
+              </Form.Group>
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className='mb-3'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-                type='email'
-                value={email}
-                onChange = {(e) =>setEmail(e.target.value)}
-                placeholder='Enter your email'
-                required
-            />
-        </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+              </Form.Group>
 
-        <Form.Group className='mb-3'>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-                type='password'
-                value={password}
-                onChange={(e)=>setPassword(e.target.value)}
-                placeholder='Enter your password'
-                required
-            />
-        </Form.Group>
+              <Button 
+                variant="primary" 
+                type="submit" 
+                className="w-100 mb-3"
+                disabled={isLoading}
+              >
+                {isLoading ? <span className="loading"></span> : 'Login'}
+              </Button>
+            </Form>
 
-        <Button
-          variant='primary'
-          type='submit'
-          className='w-100 mb-3'
-          disabled={isLoading}
-        >
-          {isLoading ? <span className='loading'></span>: 'Login'}
-        </Button>
-      </Form>
+            <div className="text-center">
+              <p>
+                Don't have an account?{' '}
+                <Link to="/register" className="text-decoration-none">
+                  Register here
+                </Link>
+              </p>
+            </div>
 
-      <div className="text-center">
-        <p>
-            Don't have an account?{' '}
-            <Button
-                variant='link'
-                className='p-0'
-                onClick={()=> setCurrentPage('register')}
-            >
-                Register here
-            </Button>
-        </p>
+            {/* Demo Credentials */}
+            <Card className="mt-3 bg-light">
+              <Card.Body>
+                <h6>Demo Credentials:</h6>
+                <small>
+                  <strong>Admin:</strong> admin@krushimitra.com / admin123<br />
+                  <strong>Farmer:</strong> rajesh@farmer.com / farmer123<br />
+                  <strong>Customer:</strong> Register as new customer
+                </small>
+              </Card.Body>
+            </Card>
+          </Card.Body>
+        </Card>
       </div>
-      
-        </Card.Body>
-      </Card>
-    </div>
-    
     </Container>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
