@@ -1,39 +1,72 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  Alert,
+} from "react-bootstrap";
+import { ShoppingCart, Star } from "lucide-react";
 
-const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelectedProduct, showAlert }) => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+const HomePage = ({
+  products,
+  addToCart,
+  currentUser,
+  setSelectedProduct,
+  showAlert,
+}) => {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-  // Generate unique categories from products
-  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))];
-  
-  // Filter products based on category and search term
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+  const categories = [
+    "all",
+    ...Array.from(new Set(products.map((p) => p.category))),
+  ];
+
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === "all" || product.category === selectedCategory;
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation();
+    addToCart(product, 1);
+  };
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    navigate(`/product/${product.id}`);
+  };
 
   return (
     <div>
       {/* Hero Section */}
       <div className="hero-section">
         <Container>
-          <h1 className="display-4 fw-bold">Fresh from Farm to Your Table</h1>
-          <p className="lead">
+          <h1 className="fade-in display-4 fw-bold">
+            Fresh from Farm to Your Table
+          </h1>
+          <p className="fade-in lead">
             Direct from farmers - Fresh, Organic, and Affordable
           </p>
           <Button
             variant="warning"
             size="lg"
             className="fade-in px-4 py-2"
-            onClick={() =>
-              document
-                .getElementById("products-section")
-                .scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => {
+              const element = document.getElementById("products-section");
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
           >
             Start Shopping
           </Button>
@@ -58,7 +91,6 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
               size="lg"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-
               className="shadow-sm"
             />
           </Col>
@@ -72,7 +104,6 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category === "all" ? "All Categories" : category}
-
                 </option>
               ))}
             </Form.Select>
@@ -80,9 +111,7 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
           <Col lg={4} className="d-flex align-items-center">
             <small className="text-muted">
               <strong>{filteredProducts.length}</strong> products found
-
-              {selectedCategory !== 'all' && ` in ${selectedCategory}`}
-
+              {selectedCategory !== "all" && ` in ${selectedCategory}`}
               {searchTerm && ` matching "${searchTerm}"`}
             </small>
           </Col>
@@ -90,9 +119,7 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
 
         {/* Products Grid */}
         <Row>
-
-          {filteredProducts.map(product => (
-
+          {filteredProducts.map((product) => (
             <Col key={product.id} lg={4} md={6} className="mb-4">
               <Card
                 className="product-card h-100 fade-in"
@@ -104,6 +131,7 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
                     variant="top"
                     src={product.image}
                     className="product-image"
+                    style={{ transition: "transform 0.3s ease" }}
                   />
                   <div className="product-overlay">
                     <small className="text-white">Click to view details</small>
@@ -153,7 +181,6 @@ const HomePage = ({ products, addToCart, currentUser, setCurrentPage, setSelecte
           ))}
         </Row>
 
-        {/* No Results Message */}
         {filteredProducts.length === 0 && (
           <div className="text-center py-5">
             <div className="mb-4">
