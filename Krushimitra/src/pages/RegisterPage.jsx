@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import { UserPlus } from 'lucide-react';
 
-const RegisterPage = ({ onRegister, setCurrentPage }) => {
+const RegisterPage = ({ onRegister }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -175,13 +176,9 @@ const RegisterPage = ({ onRegister, setCurrentPage }) => {
             <div className="text-center">
               <p>
                 Already have an account?{' '}
-                <Button 
-                  variant="link" 
-                  className="p-0"
-                  onClick={() => setCurrentPage('login')}
-                >
+                <Link to="/login" className="text-decoration-none">
                   Login here
-                </Button>
+                </Link>
               </p>
             </div>
           </Card.Body>

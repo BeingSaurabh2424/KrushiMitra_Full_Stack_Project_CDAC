@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Form, Badge, Breadcrumb } from 'react-bootstrap';
 import { ShoppingCart, Star, ArrowLeft, Plus, Minus, Heart, Share2 } from 'lucide-react';
 
-const ProductDetailPage = ({ product, addToCart, currentUser, setCurrentPage, setSelectedProduct }) => {
+const ProductDetailPage = ({ products, addToCart, currentUser, selectedProduct, setSelectedProduct }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Get product from URL parameter or selectedProduct
+  const product = selectedProduct || products.find(p => p.id === id);
 
   if (!product) {
     return (
       <Container className="mt-5 text-center">
         <h4>Product not found</h4>
-        <Button variant="primary" onClick={() => setCurrentPage('home')}>
+        <Button variant="primary" onClick={() => navigate('/')}>
           Back to Home
         </Button>
       </Container>
@@ -38,7 +44,7 @@ const ProductDetailPage = ({ product, addToCart, currentUser, setCurrentPage, se
     <Container className="mt-4">
       {/* Breadcrumb */}
       <Breadcrumb className="mb-4">
-        <Breadcrumb.Item onClick={() => setCurrentPage('home')} style={{ cursor: 'pointer' }}>
+        <Breadcrumb.Item onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
           Home
         </Breadcrumb.Item>
         <Breadcrumb.Item active>{product.category}</Breadcrumb.Item>
@@ -49,7 +55,7 @@ const ProductDetailPage = ({ product, addToCart, currentUser, setCurrentPage, se
       <Button 
         variant="outline-secondary" 
         className="mb-4"
-        onClick={() => setCurrentPage('home')}
+        onClick={() => navigate('/')}
       >
         <ArrowLeft size={18} className="me-2" />
         Back to Products
@@ -234,7 +240,7 @@ const ProductDetailPage = ({ product, addToCart, currentUser, setCurrentPage, se
           <h3 className="fw-bold mb-4">You might also like</h3>
           <div className="text-center py-4">
             <p className="text-muted">Related products will be shown here</p>
-            <Button variant="outline-primary" onClick={() => setCurrentPage('home')}>
+            <Button variant="outline-primary" onClick={() => navigate('/')}>
               Browse All Products
             </Button>
           </div>
