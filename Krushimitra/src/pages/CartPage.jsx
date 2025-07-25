@@ -12,6 +12,7 @@ const CartPage = ({ cart, removeFromCart, updateCartQuantity }) => {
   const navigate = useNavigate();
 
   if (cart.length === 0) {
+   
     return (
       <Container className="mt-5 text-center">
         <div className="py-5">
